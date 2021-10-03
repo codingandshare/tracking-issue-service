@@ -26,4 +26,3 @@ jobs:
         run: chmod +x ./gradlew
       - name: Run unit test
         run: ./gradlew clean check
-  1
