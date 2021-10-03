@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    hibernate.ddl-auto: validate
+  datasource:
+    url: jdbc:mariadb://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:tracking}
+    username: ${DB_USER:tracking}
+    password: ${DB_PASS:tracking%##}
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+app:
+  jwtSecret: '${JWT_SECRET:tr0king}'
+
+---
+spring:
+  jpa:
+    hibernate.ddl-auto: validate
+    show-sql: true
+  datasource:
+    url: jdbc:mariadb://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:tracking}
+    username: ${DB_USER:tracking}
+    password: ${DB_PASS:tracking%##}
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+
+app:
+  jwtSecret: '${JWT_SECRET:tr0king}'

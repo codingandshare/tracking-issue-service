@@ -1,0 +1,189 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: huunhancit
+      comment: Create user table
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(100)
+              - column:
+                  name: last_name
+                  type: varchar(100)
+              - column:
+                  name: email
+                  type: varchar(300)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: gender
+                  type: int(1)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: int(1)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 2
+      author: huunhancit
+      comment: add unique for username on user table
+      changes:
+        - addUniqueConstraint:
+            tableName: user
+            columnNames: username
+  - changeSet:
+      id: 3
+      author: huunhancit
+      comment: Create role tale
+      changes:
+        - createTable:
+            tableName: role
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_description
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 4
+      author: huunhancit
+      comment: Create user_role table
+      changes:
+        - createTable:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: role_id
+                  type: int
+                  constraints:
+                    primaryKey: true
+  - changeSet:
+      id: 5
+      author: huunhancit
+      comment: add ForeignKey constraints for user_role table
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: user_role
+            constraintName: fk_user_role_user
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: user
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: user_role
+            constraintName: fk_user_role_role
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: role
+  - changeSet:
+      id: 6
+      author: huunhancit
+      comment: Init data for user, role, user_role table
+      changes:
+        - insert:
+            columns:
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: password
+                  value: $2a$10$3Bk1p3VF9H5StR0G6Wf3DOx5Z53RU36g0QyfIkfU6joQPoe02CWii
+              - column:
+                  name: first_name
+                  value: Dinh
+              - column:
+                  name: last_name
+                  value: Nhan
+              - column:
+                  name: email
+                  value: huunhancit@gmail.com
+              - column:
+                  name: status
+                  value: 0
+              - column:
+                  name: gender
+                  value: 1
+            tableName: user
+        - insert:
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: role_name
+                  value: ROLE_USER
+              - column:
+                  name: role_description
+                  value: The role of user
+            tableName: role
+        - insert:
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: role_name
+                  value: ROLE_ADMIN
+              - column:
+                  name: role_description
+                  value: The role of admin
+            tableName: role
+        - insert:
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: role_id
+                  value: 1
+            tableName: user_role
+        - insert:
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: role_id
+                  value: 2
+            tableName: user_role
