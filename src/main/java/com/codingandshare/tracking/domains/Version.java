@@ -1,6 +1,7 @@
 package com.codingandshare.tracking.domains;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,9 +12,10 @@ import javax.validation.constraints.NotBlank;
  * @author Nhan Dinh
  * @since 9/26/21
  **/
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
 @Table(name = "version")
-@Data
 public class Version extends AuditBase {
 
   @Id
