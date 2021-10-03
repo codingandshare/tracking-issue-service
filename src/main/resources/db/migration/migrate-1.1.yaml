@@ -1,0 +1,326 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: huunhancit
+      comment: Create issue table
+      changes:
+        - createTable:
+            tableName: issue
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: version_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: short_description
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: ticket
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: platform
+                  type: varchar(500)
+              - column:
+                  name: browser
+                  type: varchar(500)
+              - column:
+                  name: severity
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: priority
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reporter
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fixer
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rootcause
+                  type: TEXT
+              - column:
+                  name: note
+                  type: TEXT
+              - column:
+                  name: created_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 8
+      author: huunhancit
+      comment: Create issue_history table
+      changes:
+        - createTable:
+            tableName: issue_history
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: version_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: issue_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: short_description
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: ticket
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: platform
+                  type: varchar(500)
+              - column:
+                  name: browser
+                  type: varchar(500)
+              - column:
+                  name: severity
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: priority
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reporter
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fixer
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rootcause
+                  type: text
+              - column:
+                  name: note
+                  type: text
+              - column:
+                  name: created_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: changed_note
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 9
+      author: huunhancit
+      comment: Create version table
+      changes:
+        - createTable:
+            tableName: version
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: version
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 10
+      author: huunhancit
+      comment: add ForeignKey constraints for issue, issue_history tables
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: version_id
+            baseTableName: issue
+            constraintName: fk_issue_version
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: version
+        - addForeignKeyConstraint:
+            baseColumnNames: issue_id
+            baseTableName: issue_history
+            constraintName: fk_issue_history
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: issue
+  - changeSet:
+      id: 11
+      author: huunhancit
+      comment: Create issue_metadata table
+      changes:
+        - createTable:
+            tableName: issue_metadata
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: varchar(300)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 12
+      author: huunhancit
+      comment: Create issue_view view
+      changes:
+        - createView:
+            replaceIfExists: true
+            viewName: issue_view
+            selectQuery: >
+              SELECT
+                iss.id,
+                iss.version_id,
+                iss.short_description,
+                iss.ticket,
+                iss.severity,
+                iss.priority,
+                iss.reporter,
+                iss.fixer,
+                iss.status,
+                iss.modified_by,
+                iss.modified_time,
+                latest_history.changed_note,
+                CONCAT(user_fixer.first_name, ' ', user_fixer.last_name) full_name_fixer,
+                CONCAT(user_reporter.first_name, ' ', user_reporter.last_name) full_name_reporter,
+                CONCAT(user_actor.first_name, ' ', user_actor.last_name) full_name_actor
+              FROM issue iss
+                JOIN (
+                  SELECT
+                    ih.id, ih.issue_id, ih.changed_note
+                    FROM (
+                       select issue_id, max(id) as latest_history_id
+                       FROM issue_history
+                       GROUP BY issue_id
+                     ) tmp JOIN issue_history ih ON ih.id = tmp.latest_history_id
+                  ) latest_history
+                ON iss.id = latest_history.issue_id
+                JOIN user user_fixer ON user_fixer.id = iss.fixer
+                JOIN user user_reporter ON user_reporter.id = iss.reporter
+                JOIN user user_actor ON user_actor.id = iss.modified_by
