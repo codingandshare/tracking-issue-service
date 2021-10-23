@@ -1,12 +1,17 @@
 package com.codingandshare.tracking.domains;
 
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
+ * Define domain relate to issue_history table
+ *
  * @author Nhan Dinh
  * @since 9/26/21
  **/
+@Data
 @Entity
 @Table(name = "issue_history")
 public class IssueHistory extends BaseIssue {
