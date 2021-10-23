@@ -68,6 +68,8 @@ public class IssueRequest {
   }
 
   public Issue toUpdateIssue(Issue issue) {
-    return convertIssue(issue, this);
+    Issue issueUpdating = convertIssue(issue, this);
+    issueUpdating.setTicket(issue.getTicket());
+    return issueUpdating;
   }
 }
