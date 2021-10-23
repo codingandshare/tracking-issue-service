@@ -324,3 +324,11 @@ databaseChangeLog:
                 JOIN user user_fixer ON user_fixer.id = iss.fixer
                 JOIN user user_reporter ON user_reporter.id = iss.reporter
                 JOIN user user_actor ON user_actor.id = iss.modified_by
+  - changeSet:
+      id: 13
+      author: huunhancit
+      comment: add unique for ticket on issue table
+      changes:
+        - addUniqueConstraint:
+            tableName: issue
+            columnNames: ticket
