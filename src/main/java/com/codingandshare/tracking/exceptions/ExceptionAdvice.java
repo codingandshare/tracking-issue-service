@@ -1,6 +1,7 @@
 package com.codingandshare.tracking.exceptions;
 
 import com.codingandshare.tracking.dtos.ResponseObject;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,6 +12,8 @@ import javax.validation.ConstraintViolationException;
 import java.util.Objects;
 
 /**
+ * Capture all exceptions to handle response json
+ *
  * @author Nhan Dinh
  * @since 9/26/21
  **/
@@ -50,6 +53,13 @@ public class ExceptionAdvice {
     ResponseObject responseObject = new ResponseObject();
     responseObject.setMessage(ex.getMessage());
     return new ResponseEntity<>(responseObject, HttpStatus.UNAUTHORIZED);
+  }
+
+  @ExceptionHandler(DuplicateKeyException.class)
+  ResponseEntity<ResponseObject> handleDuplicateKeyException(DuplicateKeyException ex) {
+    ResponseObject responseObject = new ResponseObject();
+    responseObject.setMessage(ex.getMessage());
+    return new ResponseEntity<>(responseObject, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(ConstraintViolationException.class)

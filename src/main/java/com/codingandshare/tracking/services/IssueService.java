@@ -9,6 +9,7 @@ import com.codingandshare.tracking.repositories.IssueRepository;
 import com.codingandshare.tracking.repositories.IssueViewRepository;
 import com.codingandshare.tracking.specifications.IssueSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,12 @@ public class IssueService {
 
   @Transactional
   public void addIssue(IssueRequest issueRequest) {
+    Optional<Issue> issueOptional = this.issueRepository.findIssueByTicket(issueRequest.getTicket());
+    issueOptional.ifPresent((it) -> {
+      throw new DuplicateKeyException(
+          String.format("Ticket: %s already exist in versionId: %d", it.getTicket(), it.getVersionId())
+      );
+    });
     User userCurrent = this.authenUserService.getUserCurrentLogin();
     Issue issue = issueRequest.toNewIssue();
     issue.setStatus(IssueStatus.OPEN);
