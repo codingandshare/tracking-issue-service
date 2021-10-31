@@ -17,6 +17,8 @@ app:
   jwtSecret: '${JWT_SECRET:tr0king}'
 
 ---
+server:
+  port: 8088
 spring:
   jpa:
     hibernate.ddl-auto: validate
