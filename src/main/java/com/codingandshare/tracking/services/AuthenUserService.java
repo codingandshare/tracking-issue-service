@@ -51,7 +51,11 @@ public class AuthenUserService implements UserDetailsService {
     User user = userOptional.orElseThrow(() ->
         new UsernameNotFoundException(String.format("User %s not found", username))
     );
-    return new UserDetailsImpl(user);
+    UserDetails userDetails = new UserDetailsImpl(user);
+    if (!userDetails.isEnabled()) {
+      throw new UsernameNotFoundException("User is disabled");
+    }
+    return userDetails;
   }
 
   /**
