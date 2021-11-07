@@ -41,12 +41,13 @@ public class UserService {
   private PasswordEncoder passwordEncoder;
 
   /**
-   * Get list user info
+   * Get list user info active
+   * Exclude all users status is inactive
    *
    * @return {@link List< UserInfo >}
    */
   public List<UserInfo> getUsers() {
-    List<User> users = this.userRepository.findAll();
+    List<User> users = this.userRepository.findUserByStatusOrderByUsernameAsc(UserStatus.ACTIVE);
     return users.stream().map(it -> UserInfo
         .builder()
         .username(it.getUsername())
@@ -55,6 +56,13 @@ public class UserService {
         .lastName(it.getLastName()).build()).collect(Collectors.toList());
   }
 
+  /**
+   * Change password of user current login
+   *
+   * @param changePassword contain oldPassword/newPassword
+   * @throws NotFoundException        user login not found in db
+   * @throws IllegalArgumentException old password is correct
+   */
   public void changePassword(ChangePassword changePassword) {
     User currentUser = this.authenUserService.getUserCurrentLogin();
     Optional<User> userOptional = this.userRepository.findById(currentUser.getId());
@@ -69,6 +77,11 @@ public class UserService {
     }
   }
 
+  /**
+   * Update user for user current login
+   *
+   * @param userUpdateRequest
+   */
   public void updateUser(UserUpdateRequest userUpdateRequest) {
     User user = this.authenUserService.getUserCurrentLogin();
     user.setFirstName(userUpdateRequest.getFirstName());
@@ -78,12 +91,18 @@ public class UserService {
     this.userRepository.save(user);
   }
 
+  /**
+   * Create new user
+   * Only allow user admin can be created
+   *
+   * @param userRequest
+   */
   @IsRoleAdmin
   public void createUser(UserCreateRequest userRequest) {
     Optional<User> userOptional = this.userRepository.findUserByUsername(userRequest.getUsername());
-    userOptional.orElseThrow(() -> {
+    if (userOptional.isPresent()) {
       throw new IllegalArgumentException("Username is existed");
-    });
+    }
     User user = new User();
     user.setUsername(userRequest.getUsername());
     user.setPassword(this.passwordEncoder.encode(userRequest.getPassword()));
@@ -91,6 +110,7 @@ public class UserService {
     user.setLastName(userRequest.getLastName());
     user.setEmail(userRequest.getEmail());
     user.setGender(userRequest.getGender());
+    user.setStatus(UserStatus.ACTIVE);
     Set<Role> roles = new HashSet<>();
     Role userRole = new Role();
     userRole.setId(1);
@@ -99,11 +119,25 @@ public class UserService {
     this.userRepository.save(user);
   }
 
+  /**
+   * List all users, manage by admin user
+   *
+   * @param pageable
+   * @return page user
+   */
   @IsRoleAdmin
   public Page<User> findUsers(Pageable pageable) {
     return this.userRepository.findAll(pageable);
   }
 
+  /**
+   * Update user status with user id
+   * Only update by user admin
+   *
+   * @param id
+   * @param userStatus
+   */
+  @IsRoleAdmin
   public void updateStatus(Integer id, UserStatus userStatus) {
     Optional<User> userOptional = this.userRepository.findById(id);
     User userUpdating = userOptional.orElseThrow(() -> {

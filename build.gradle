@@ -9,6 +9,8 @@ group = 'com.codingandshare'
 version = '1.0.RELEASE'
 sourceCompatibility = '11'
 
+apply from: 'gradle/jacoco.gradle'
+
 repositories {
 	mavenCentral()
 }

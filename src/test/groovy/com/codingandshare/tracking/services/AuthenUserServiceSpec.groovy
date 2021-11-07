@@ -44,7 +44,7 @@ class AuthenUserServiceSpec extends BaseSpec {
   JwtTokenProvider jwtTokenProvider
 
   @Autowired
-  private AuthenticationManager authenticationManager;
+  private AuthenticationManager authenticationManager
 
   def 'Verify load user when user not found or is inactive'() {
     given: 'Setup user is inactive'

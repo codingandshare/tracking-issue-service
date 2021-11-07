@@ -1,0 +1,18 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+}
+
+apply plugin: 'jacoco'
+
+jacocoTestReport {
+  executionData test
+  reports {
+    xml.enabled true
+    html.enabled true
+    csv.enabled true
+  }
+}
+
+check.dependsOn jacocoTestReport
